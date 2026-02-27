@@ -13,23 +13,33 @@ const BookingController = require('./controllers/bookingController');
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
-// ── Core middleware
+// ── CORS — must come BEFORE all other middleware and routes
 app.use(cors({
   origin: 'https://cpen-421-mini-project-campus-booking.onrender.com',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,   // allows session cookies cross-origin
 }));
+
+// Handle preflight OPTIONS requests for every route
+app.options('*', cors({
+  origin: 'https://cpen-421-mini-project-campus-booking.onrender.com',
+  credentials: true,
+}));
+
+// ── Core middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ── Session (NEW)
+// ── Session
 app.use(session({
   secret:            process.env.SESSION_SECRET || 'campus-dev-secret-change-me',
   resave:            false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure:   process.env.NODE_ENV === 'production',
+    secure:   process.env.NODE_ENV === 'production',  // true on Render (HTTPS)
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',  // 'none' required for cross-origin cookies
     maxAge:   1000 * 60 * 60 * 8,  // 8 hours
   },
 }));
