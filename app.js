@@ -1,9 +1,12 @@
 // app.js — Campus Facility Booking System (Auth enabled)
 require('dotenv').config();
-const express = require('express');
-const session = require('express-session');
-const cors    = require('cors');
-const path    = require('path');
+const express    = require('express');
+const session    = require('express-session');
+const pgSession  = require('connect-pg-simple')(session);
+const cors       = require('cors');
+const path       = require('path');
+const { Pool }   = require('pg');
+
 
 const authRoutes     = require('./routes/authRoutes');
 const facilityRoutes = require('./routes/facilityRoutes');
@@ -32,15 +35,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ── Session
+const pgPool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+});
+
 app.use(session({
+  store: new pgSession({
+    pool:                pgPool,
+    tableName:           'session',
+    createTableIfMissing: true,
+  }),
   secret:            process.env.SESSION_SECRET || 'campus-dev-secret-change-me',
   resave:            false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure:   process.env.NODE_ENV === 'production',  // true on Render (HTTPS)
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',  // 'none' required for cross-origin cookies
-    maxAge:   1000 * 60 * 60 * 8,  // 8 hours
+    secure:   process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge:   1000 * 60 * 60 * 8,
   },
 }));
 
