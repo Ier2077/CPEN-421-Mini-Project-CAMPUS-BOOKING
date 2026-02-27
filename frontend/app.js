@@ -5,7 +5,7 @@ const API_BASE = (
   window.location.protocol === 'file:' ||
   ['localhost', '127.0.0.1'].includes(window.location.hostname)
 ) ? 'http://localhost:3000'
-  : 'https://campus-booking-xyz.onrender.com'; 
+  : '';  // same service in production — use relative URLs
 
 // ═══════════════════════════════════════════════════════════
 // STATE
