@@ -1,3 +1,11 @@
+// CORS setup
+const cors = require('cors');
+
+app.use(cors({
+  origin: 'https://cpen-421-mini-project-campus-booking.onrender.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 // app.js — Campus Facility Booking System (Auth enabled)
 require('dotenv').config();
 const express = require('express');
