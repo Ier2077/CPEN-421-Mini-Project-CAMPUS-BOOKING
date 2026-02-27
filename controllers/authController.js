@@ -39,24 +39,18 @@ const AuthController = {
       }
 
       // 3. Store in session (never store password_hash)
-    req.session.user = {
-      id:    user.id,
-      name:  user.name,
-      email: user.email,
-      role:  user.role,
-    };
+      req.session.user = {
+        id:    user.id,
+        name:  user.name,
+        email: user.email,
+        role:  user.role,
+      };
 
-    req.session.save(err => {
-      if (err) {
-        console.error('Session save error:', err);
-        return res.status(500).json({ success: false, error: 'Session error' });
-      }
       return res.status(200).json({
         success: true,
         message: `Welcome back, ${user.name}!`,
         data: req.session.user,
       });
-    });
     } catch (err) {
       console.error('login error:', err.message);
       return res.status(500).json({ success: false, error: 'Internal server error' });
@@ -113,24 +107,18 @@ const AuthController = {
       const user = await UserModel.create({ name, email, password });
 
       // Log them in immediately
-    req.session.user = {
-      id:    user.id,
-      name:  user.name,
-      email: user.email,
-      role:  user.role,
-    };
+      req.session.user = {
+        id:    user.id,
+        name:  user.name,
+        email: user.email,
+        role:  user.role,
+      };
 
-    req.session.save(err => {
-      if (err) {
-        console.error('Session save error:', err);
-        return res.status(500).json({ success: false, error: 'Session error' });
-      }
       return res.status(201).json({
         success: true,
         message: `Account created! Welcome, ${user.name}!`,
         data: req.session.user,
       });
-    });
     } catch (err) {
       console.error('register error:', err.message);
       return res.status(500).json({ success: false, error: 'Internal server error' });
