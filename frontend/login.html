@@ -235,7 +235,7 @@
   <script>
     const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
       ? 'http://localhost:3000'
-      : 'https://campus-booking-xyz.onrender.com';
+      : '';  // same service in production — use relative URLs
 
     // ── Tabs
     document.getElementById('tab-login').addEventListener('click', () => switchTab('login'));
