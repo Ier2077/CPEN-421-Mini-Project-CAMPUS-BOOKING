@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UG Campus Booking — Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:  #0f2744;
+      --blue:  #2563eb;
+      --blue-light: #eff4ff;
+      --border: #e2e8f0;
+      --bg:    #f0f4f8;
+      --red:   #dc2626;
+      --green: #059669;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .auth-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 4px 24px rgba(15,39,68,.1);
+      overflow: hidden;
+    }
+
+    .auth-header {
+      background: var(--navy);
+      padding: 32px 32px 28px;
+      text-align: center;
+    }
+    .auth-logo {
+      width: 48px; height: 48px;
+      background: var(--blue);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 1.4rem;
+    }
+    .auth-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .auth-sub { font-size: .82rem; color: rgba(255,255,255,.5); margin-top: 4px; }
+
+    .auth-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 14px;
+      text-align: center;
+      font-size: .88rem;
+      font-weight: 600;
+      color: #94a3b8;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+      border-bottom: 2px solid transparent;
+      transition: all .2s;
+    }
+    .auth-tab.active { color: var(--navy); border-bottom-color: var(--blue); }
+
+    .auth-body { padding: 28px 32px; }
+
+    .form-panel { display: none; }
+    .form-panel.active { display: block; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: .75rem;
+      font-weight: 600;
+      color: #4a6080;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: .9rem;
+      font-family: inherit;
+      color: var(--navy);
+      background: #fff;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .form-group input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: .9rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background .2s;
+    }
+    .btn-submit:hover { background: #1a3a5c; }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; }
+
+    .error-msg {
+      background: #fee2e2;
+      color: var(--red);
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 10px 13px;
+      font-size: .83rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+
+    .success-msg {
+      background: #d1fae5;
+      color: var(--green);
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 10px 13px;
+      font-size: .83rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .success-msg.show { display: block; }
+
+    .demo-creds {
+      margin-top: 20px;
+      padding: 14px;
+      background: var(--blue-light);
+      border-radius: 8px;
+      font-size: .8rem;
+      color: #2563eb;
+    }
+    .demo-creds strong { display: block; margin-bottom: 6px; font-weight: 600; }
+    .demo-creds code {
+      display: block;
+      margin-top: 4px;
+      font-family: monospace;
+      font-size: .82rem;
+      cursor: pointer;
+      padding: 3px 6px;
+      border-radius: 4px;
+      background: rgba(37,99,235,.1);
+    }
+    .demo-creds code:hover { background: rgba(37,99,235,.2); }
+  </style>
+</head>
+<body>
+
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-logo">🎓</div>
+      <h1 class="auth-title">UG Campus Booking</h1>
+      <p class="auth-sub">Sign in to manage your facility reservations</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login">Sign In</button>
+      <button class="auth-tab"        id="tab-register">Register</button>
+    </div>
+
+    <div class="auth-body">
+
+      <!-- ── Login Panel ── -->
+      <div class="form-panel active" id="panel-login">
+        <div class="error-msg"   id="login-error"></div>
+        <div class="success-msg" id="login-success"></div>
+        <form id="login-form" novalidate>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="login-email" placeholder="you@ug.edu.gh" autocomplete="email" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" required />
+          </div>
+          <button type="submit" class="btn-submit" id="login-btn">Sign In</button>
+        </form>
+
+
+      </div>
+
+      <!-- ── Register Panel ── -->
+      <div class="form-panel" id="panel-register">
+        <div class="error-msg"   id="reg-error"></div>
+        <div class="success-msg" id="reg-success"></div>
+        <form id="register-form" novalidate>
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="reg-name" placeholder="Kwame Mensah" required />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="reg-email" placeholder="you@ug.edu.gh" required />
+          </div>
+          <div class="form-group">
+            <label>Password (min 6 characters)</label>
+            <input type="password" id="reg-password" placeholder="••••••••" required />
+          </div>
+          <button type="submit" class="btn-submit" id="reg-btn">Create Account</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3000'
+      : '';  // same origin in production
+
+    // ── Tabs
+    document.getElementById('tab-login').addEventListener('click', () => switchTab('login'));
+    document.getElementById('tab-register').addEventListener('click', () => switchTab('register'));
+
+    function switchTab(tab) {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById(`tab-${tab}`).classList.add('active');
+      document.getElementById(`panel-${tab}`).classList.add('active');
+    }
+
+    // ── Fill demo credentials on click
+    function fillLogin(email) {
+      document.getElementById('login-email').value    = email;
+      document.getElementById('login-password').value = 'password123';
+    }
+
+    // ── Login
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('login-btn');
+      const errEl = document.getElementById('login-error');
+      errEl.classList.remove('show');
+
+      const email    = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      btn.textContent = 'Signing in…';
+      btn.disabled = true;
+
+      try {
+        const res  = await fetch(`${API}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          errEl.textContent = data.error || 'Login failed';
+          errEl.classList.add('show');
+        } else {
+          // Redirect to dashboard
+          window.location.href = '/';
+        }
+      } catch (err) {
+        errEl.textContent = 'Network error — is the server running?';
+        errEl.classList.add('show');
+      } finally {
+        btn.textContent = 'Sign In';
+        btn.disabled = false;
+      }
+    });
+
+    // ── Register
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn    = document.getElementById('reg-btn');
+      const errEl  = document.getElementById('reg-error');
+      const succEl = document.getElementById('reg-success');
+      errEl.classList.remove('show');
+      succEl.classList.remove('show');
+
+      const name     = document.getElementById('reg-name').value.trim();
+      const email    = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+
+      btn.textContent = 'Creating account…';
+      btn.disabled = true;
+
+      try {
+        const res  = await fetch(`${API}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ name, email, password }),
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          errEl.textContent = data.error || 'Registration failed';
+          errEl.classList.add('show');
+        } else {
+          window.location.href = '/';
+        }
+      } catch (err) {
+        errEl.textContent = 'Network error';
+        errEl.classList.add('show');
+      } finally {
+        btn.textContent = 'Create Account';
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
