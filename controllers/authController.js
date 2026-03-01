@@ -59,16 +59,11 @@ const AuthController = {
 
   /**
    * POST /auth/logout
-   * Destroys the session.
-   */
+   * Clears the cookie-session by setting it to null.
+     */
   async logout(req, res) {
-    req.session.destroy(err => {
-      if (err) {
-        return res.status(500).json({ success: false, error: 'Could not log out' });
-      }
-      res.clearCookie('connect.sid');
-      return res.status(200).json({ success: true, message: 'Logged out successfully' });
-    });
+    req.session = null;
+    return res.status(200).json({ success: true, message: 'Logged out successfully' });
   },
 
   /**
